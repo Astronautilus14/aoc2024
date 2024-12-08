@@ -19,7 +19,7 @@ for i, l in enumerate(lines):
             fY = yPos + multiplier * dY
             multiplier += 1
 
-          multiplier = 0
+          multiplier = 1
           sX, sY = xPos, yPos
           while 0 <= sX < len(l) and 0 <= sY < len(lines):
             locations.add((sX,sY))
