@@ -4,7 +4,7 @@ f = open('inp.txt', 'r')
 
 g = [[int(x) for x in r.strip()] for r in f.readlines()]
 
-def search(g: List[List[int]], x, y, height: int) -> Tuple[List[Tuple[int, int]], int]:
+def search(g: List[List[int]], x: int, y: int, height: int) -> List[Tuple[int, int]]:
   if height == 10:
     return [(x, y)]
   directions = [(-1,0),(0,1),(1,0),(0,-1)]

@@ -9,17 +9,17 @@ def calculateSize(stone, depth):
     return 1
   
   if stone == 0:
-      return calculateSize(1, depth-1)
+      return calculateSize(1, depth - 1)
   
   string = str(stone)
   if len(string) % 2 == 0:
     idx = len(string) // 2
-    return calculateSize(int(string[:idx]), depth-1) + calculateSize(int(string[idx:]), depth-1)
+    return calculateSize(int(string[:idx]), depth - 1) + calculateSize(int(string[idx:]), depth - 1)
   
   return calculateSize(stone * 2024, depth - 1)
 
 res = 0
-for i, stone in enumerate(stones, 1):
+for stone in stones:
   res += calculateSize(stone, 75)
 
 print(res)
