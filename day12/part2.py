@@ -1,6 +1,6 @@
 from typing import List, Set, Tuple
 
-grid = [list(l.strip()) for l in open('sample3.txt').readlines()]
+grid = [list(l.strip()) for l in open('inp.txt').readlines()]
 
 directions = [(-1,0), (0,1), (1,0), (0, -1)]
 
@@ -33,7 +33,7 @@ def findEdges(region: List[Tuple[int, int]], g, searchRegion = None) -> Set[Tupl
       if searchRegion == None:
         if not (y2 in range(len(g)) and x2 in range(len(g[0]))) or g[y2][x2] != g[y][x]:
           edges.add((x2, y2))
-      elif y2 in range(len(g)) and x2 in range(len(g[0])) and (x2, y2) in searchRegion:
+      elif (x2, y2) in searchRegion:
           edges.add((x2,y2))
   return edges
 
@@ -51,17 +51,27 @@ def groupEdges(edges: Set[Tuple[int, int]]) -> List[Set[Tuple[int, int]]]:
   
   return [floodfill(*edge) for edge in edges if edge not in seen]
 
+def printGrid(g):
+  print("\n".join("".join(l) for l in g))
+
 res = 0
 regions = findRegions(grid) # Vind all regions
 for region in regions:
+  # gc = [["#" if (x,y) in region else "." for x in range(len(grid[0]))] for y in range(len(grid))]
+  # printGrid(gc)
+
   sides = 0
-  edges = findEdges(region, grid) # Find all cells (edges), including off grid, toucing the region
-  edgeGroups = groupEdges(edges) # Find all regions of these edges and group them
-  for edgeGroup in edgeGroups:
-    touchingSides = findEdges(edgeGroup, grid, region) # Find all the cells of the original region that touch this region of edges
-    sides += len(groupEdges(touchingSides)) # Group these original cells
+  # gc = [["#" if (x,y) in region else "$" if (x,y) in edges else "." for x in range(-1, len(grid[0])+1)] for y in range(-1, len(grid)+1)]
+  # printGrid(gc)
+
+  for edgeGroup in groupEdges(findEdges(region, grid)):
+    for touchingGroup in groupEdges(findEdges(edgeGroup, grid, region)):
+      for xx in groupEdges(findEdges(touchingGroup, grid, edgeGroup)):
+        sides += len(groupEdges(findEdges(xx, grid, touchingGroup)))
   res += sides * len(region)
+
+  # print(sides)
 
 print(res)
 
-# 854340 too low
+# 887849 too low
